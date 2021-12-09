@@ -79,7 +79,7 @@ for baris in range(len(alternatif)):
         if ketKriteria[kolom] == "untung":
             hasil = r/max(nilaiBagi)
         else :
-            hasil = r/min(nilaiBagi)
+            hasil = min(nilaiBagi)/r
         matrixSementara.append(hasil)
     matrix.append(matrixSementara)
 
