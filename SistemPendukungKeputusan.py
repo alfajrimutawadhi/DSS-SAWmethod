@@ -50,7 +50,7 @@ inputAlternatif(jumlahAlternatif, kriteria, subKriteria)
 
 
 
-# tabel nilai alternatif (sudah bisa)
+# tabel nilai alternatif
 title = ["Alternatif"]
 for item in kriteria:
     title.append(item)
@@ -89,7 +89,6 @@ tampilanMatrix = reshape(matrix, (len(matrix), len(matrix[0])))
 print(tampilanMatrix)
 
 # perankingan
-# MASIH ADA YANG SALAH DIKIT
 print("============================")
 print("hasil perankingan")
 ranking = []
@@ -114,4 +113,3 @@ print("============================")
 nama = ranking.index(max(ranking))
 print("rekomendasi untuk kasus "+judul+" adalah = "+alternatif[nama][0])
 
-# pembuatan 8 jam
