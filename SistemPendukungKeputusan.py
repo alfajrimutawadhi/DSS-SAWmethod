@@ -19,10 +19,10 @@ def inputKriteria(jumlahKrit):
             subKriteriaSementara = []
             for y in range(jumlahSubKriteria):
                 subKriteriaSementara.append(input("Masukkan sub kriteria yang ke-"+str(y+1)+" : "))
-                subKriteria.append(subKriteriaSementara)
+            subKriteria.append(subKriteriaSementara)
         else:
             subKriteria.append([])
-    
+
         
 def inputBobot(paramBobot):
     for x in range(paramBobot):
