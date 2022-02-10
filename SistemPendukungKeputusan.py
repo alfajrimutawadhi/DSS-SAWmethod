@@ -108,7 +108,7 @@ for x in range(len(ranking)):
     print(alternatif[x][0]+" => "+ str(ranking[x]))
 
 
-# kesimpulan
+# kesimpulan yang dihasilkan
 print("============================")
 nama = ranking.index(max(ranking))
 print("rekomendasi untuk kasus "+judul+" adalah = "+alternatif[nama][0])
