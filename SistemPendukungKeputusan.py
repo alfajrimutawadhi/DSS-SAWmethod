@@ -2,114 +2,180 @@ from prettytable import PrettyTable
 from numpy import *
 table = PrettyTable()
 
-judul = input("Masukkan judul kasus : ")
-kriteria = []
-ketKriteria =[]
-subKriteria = []
-bobot = []
-alternatif = []
+criteria = []
+criteriaDescription = []
+subCriteria = []
+priority = []
+alternative = []
 
-def inputKriteria(jumlahKrit):
-    for x in range(jumlahKrit):
-        kriteria.append(input("Nama kriteria "+str(x+1)+" : "))
-        ketKriteria.append(input("Kriteria ini termasuk (untung/rugi) ? "))
-        kondisi = input("Apakah kriteria ini mempunyai sub kriteria (y/n) ? ")
-        if kondisi == "y":
-            jumlahSubKriteria = int(input("Berapa jumlah sub kriteria ? "))
-            subKriteriaSementara = []
-            for y in range(jumlahSubKriteria):
-                subKriteriaSementara.append(input("Masukkan sub kriteria yang ke-"+str(y+1)+" : "))
-            subKriteria.append(subKriteriaSementara)
-        else:
-            subKriteria.append([])
+def inputCriteria(count):
+    for i in range(count):
+        criteria.append(input("Criteria name "+str(i+1)+" : "))
 
-        
-def inputBobot(paramBobot):
-    for x in range(paramBobot):
-        bobot.append(int(input("Masukkan bobot untuk kriteria '"+kriteria[x]+"' (1 - 100) : ")))
-
-def inputAlternatif(jumlahAlt, dataKrit, dataSubKriteria):
-    for x in range(jumlahAlt):
-        namaAlternatif = input("Nama alternatif ke-"+str(x+1)+"? ")
-        nilaiAlternatifSementara = []
-        for y in range(len(dataKrit)):
-            if dataSubKriteria[y] == []:
-                inputNilai = int(input("Masukkan nilai '"+dataKrit[y]+"' : "))
-                nilaiAlternatifSementara.append(inputNilai)
+        while True:
+            describe = input("Criteria  "+criteria[i]+" incldude (profit/loss) : ")
+            if describe == "profit" or describe == "loss":
+                criteriaDescription.append(describe)
+                break
             else:
-                inputNilai = input("Masukkan nilai "+str(dataSubKriteria[y])+" : ")
-                nilaiAlternatifSementara.append(dataSubKriteria[y].index(inputNilai)+1)
-        alternatif.append([namaAlternatif, nilaiAlternatifSementara])
-                
-        
-jumlahKriteria = int(input("Berapa kriteria yang ingin anda masukkan? "))
-inputKriteria(jumlahKriteria)
-inputBobot(len(kriteria))
-jumlahAlternatif = int(input("Berapa jumlah alternatif yang ingin anda masukkan? "))
-inputAlternatif(jumlahAlternatif, kriteria, subKriteria)
+                print("Please input 'profit' or 'loss'")
+                continue
+
+        while True:
+            subCriteriaInput = input("Criteria "+criteria[i]+" include sub criteria (y/n) : ")
+            if subCriteriaInput == "y" or subCriteriaInput == "n":
+                break
+            else:
+                print("Please input 'y' or 'n'")
+                continue
+
+        if subCriteriaInput == "y":
+            while True:
+                subCriteriaCount = input("How many sub criteria : ")
+                if subCriteriaCount.isdigit():
+                    subCriteriaCount = int(subCriteriaCount)
+                    break
+                else:
+                    print("Please input number")
+                    continue
+            
+            subCriteriaList = []
+            for j in range(subCriteriaCount):
+                subCriteriaList.append(input("Sub criteria name "+str(j+1)+" : "))
+            subCriteria.append(subCriteriaList)
+        else:
+            subCriteria.append([])
+
+def inputPriority(value):
+    for x in range(value):
+        while True:
+            prioriyInput = input("Input priority for criteria '"+criteria[x]+"' (1-100) : ")
+            if prioriyInput.isdigit():
+                priority.append(int(prioriyInput))
+                break
+            else:
+                print("Please input number")
+                continue
+
+def inputAlternative(totalAlternative, criteriaData, subCriteriaData):
+    for x in range(totalAlternative):
+        alternativeName = input("Input alternative name number "+str(x+1)+" : ")
+        alternativeValue = []
+        for y in range(len(criteriaData)):
+            if subCriteriaData[y] == []:
+                while True:
+                    inputValue = input("Input value for '"+criteriaData[y]+"' : ")
+                    if inputValue.isdigit():
+                        alternativeValue.append(int(inputValue))
+                        break
+                    else:
+                        print("Please input number")
+                        continue
+            else:
+                while True:
+                    inputValue = input("Input value for '"+str(subCriteriaData[y])+"' : ")
+                    if inputValue in subCriteriaData[y]:
+                        break
+                    else:
+                        print("Please choose one between '"+str(subCriteriaData[y])+"'")
+                        continue
+                alternativeValue.append(subCriteriaData[y].index(inputValue)+1)
+        alternative.append([alternativeName, alternativeValue])
 
 
+# input case title
+title = input("Input your case title : ")
 
-# tabel nilai alternatif
-title = ["Alternatif"]
-for item in kriteria:
-    title.append(item)
-table.field_names = title
+# input criteria
+while True:
+    totalCriteria = input("How many criteria : ")
+    if totalCriteria.isdigit() :
+        inputCriteria(int(totalCriteria))
+        inputPriority(len(criteria))
+        break
+    else:
+        print("Please input number")
+        continue
 
-for x in range(len(alternatif)):
+
+# input alternative
+while True:
+    totalAlternative = input("How many alternative : ")
+    if totalAlternative.isdigit():
+        inputAlternative(int(totalAlternative), criteria, subCriteria)
+        break
+    else:
+        print("Please input number")
+        continue
+
+
+# create table
+tableTitle = ["Alternative"]
+for item in criteria:
+    tableTitle.append(item)
+table.field_names = tableTitle
+
+for i in range(len(alternative)):
     content = []
-    content.append(alternatif[x][0])
-    for y in alternatif[x][1]:
-        content.append(y)
+    content.append(alternative[i][0])
+    for item in alternative[i][1]:
+        content.append(item)
     table.add_row(content)
+
 print("============================")
-print("tabel nilai alternatif")
+print("alternative table")
 print(table)
 
-# normalisasi
-matrix = []
-for baris in range(len(alternatif)):
-    matrixSementara = []
-    for kolom in range(len(kriteria)):
-        r = alternatif[baris][1][kolom]
-        nilaiBagi = []
-        for x in range(len(alternatif)):
-            nilaiBagiSementara = alternatif[x][1][kolom]
-            nilaiBagi.append(nilaiBagiSementara)
-        if ketKriteria[kolom] == "untung":
-            hasil = r/max(nilaiBagi)
-        else :
-            hasil = min(nilaiBagi)/r
-        matrixSementara.append(hasil)
-    matrix.append(matrixSementara)
 
-print("============================")
-print("hasil matrix normalisasi")
-tampilanMatrix = reshape(matrix, (len(matrix), len(matrix[0])))
-print(tampilanMatrix)
+# normalization
+matrixData = []
+for row in range(len(alternative)):
+    matrixDataList = []
+    for col in range(len(criteria)):
+        value = alternative[row][1][col]
+        divisionValue = []
+        for i in range(len(alternative)):
+            divisionValue.append(alternative[i][1][col])
 
-# perankingan
+        # print(divisionValue)
+
+        if criteriaDescription[col] == "profit":
+            result = value/max(divisionValue)
+        else:
+            result = min(divisionValue)/value
+        
+        matrixDataList.append(result)
+    matrixData.append(matrixDataList)
+
+
+# visualize matrix
 print("============================")
-print("hasil perankingan")
+print("matrix result")
+visualizeMatrix = reshape(matrixData, (len(matrixData), len(matrixData[0])))
+print(visualizeMatrix)
+
+
+# ranking
 ranking = []
-for baris in range(len(matrix)):
-    nilai = 0
-    nilaiPerBaris = []
-    for kolom in range(len(matrix[baris])):
-        nilaiBobot = bobot[kolom]/100
-        posisi = matrix[baris][kolom]
-        nilaiPerPosisi = posisi*nilaiBobot
-        nilaiPerBaris.append(nilaiPerPosisi)
-    for item in nilaiPerBaris:
-        nilai += item
-    ranking.append(nilai)
+for row in range(len(matrixData)):
+    value = 0
+    valuePerRow = []
+    for col in range(len(matrixData[row])):
+        priorityValue = priority[col]/100
+        position = matrixData[row][col]
+        valuePerPosition = position*priorityValue
+        valuePerRow.append(valuePerPosition)
+    for item in valuePerRow:
+        value += item
+    ranking.append(value)
 
-for x in range(len(ranking)):
-    print(alternatif[x][0]+" => "+ str(ranking[x]))
-
-
-# kesimpulan
 print("============================")
-nama = ranking.index(max(ranking))
-print("rekomendasi untuk kasus "+judul+" adalah = "+alternatif[nama][0])
+print("ranking result")
+for i in range(len(ranking)):
+    print(alternative[i][0]+" => "+str(ranking[i]))
+
+# conclusion
+print("============================")
+alternativeNameResult = ranking.index(max(ranking))
+print("recommendations for cases "+title+" is : "+alternative[alternativeNameResult][0])
 
