@@ -1,11 +1,9 @@
-from pymysql import NULL
-
 class Criteria(object):
     def __init__(self, name):
         self.name = name
-        self.desc = NULL
+        self.desc = None
         self.sub_criteria = []
-        self.priority = NULL
+        self.priority = None
 
     def add_sub_criteria(self, sub_criteria):
         self.sub_criteria.append(sub_criteria)
